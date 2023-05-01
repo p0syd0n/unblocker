@@ -4,21 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Form</title>
+    <title>Classroom</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        input[type="text"] {
+            padding: 5px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
+    <form onsubmit="event.preventDefault(); getStuff();">
+        <label for="searchTerm">Search:</label>
+        <input type="text" id="searchTerm" name="searchTerm">
+        <button type="submit">Submit</button>
+    </form>
+
     <script>
         function getStuff() {
             const text = document.getElementById('searchTerm').value;
             window.location.href = `/?target=${text}`;
         }
     </script>
-    <form onsubmit="event.preventDefault(); getStuff();" style="display:flex; align-items:center;">
-        <label for="searchTerm" style="margin-right:10px;">Search:</label>
-        <input type="text" id="searchTerm" name="searchTerm" style="flex:1; padding: 5px;">
-        <button type="submit" style="background-color:#007bff; color:#fff; border:none; padding: 5px 10px; border-radius: 5px;">Submit</button>
-    </form>
 </body>
 
 </html>
