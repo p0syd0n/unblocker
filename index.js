@@ -26,7 +26,7 @@ app.use('/', (req, res, next) => {
   }
 
   if (!req.session.target) {
-    return res.status(400).send('Missing target parameter');
+    res.redirect('/create')
   }
   const target = req.session.target;//req.url.replace('/', 'http://');
   const proxy = createProxyMiddleware({//https://modified-chat-app.itemply.repl.co
