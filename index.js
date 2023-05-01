@@ -1,17 +1,35 @@
 const express = require('express');
 const morgan = require('morgan');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-
+const session = require('express-session');
 const app = express();
 
 const PORT = process.env.PORT || 3000;
 const HOST = 'localhost';
 
 app.use(morgan('dev'));
+app.set('view engine', 'ejs');
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Set to true if using HTTPS
+}));
+
+app.use('/create', (req, res) => {
+  res.render('search')
+});
 
 app.use('/', (req, res, next) => {
-  const target = "https://modified-chat-app.itemply.repl.co/"//req.url.replace('/', 'http://');
-  const proxy = createProxyMiddleware({
+  if (req.query.target) {
+    req.session.target = req.query.target;
+  }
+
+  if (!req.session.target) {
+    return res.status(400).send('Missing target parameter');
+  }
+  const target = req.session.target;//req.url.replace('/', 'http://');
+  const proxy = createProxyMiddleware({//https://modified-chat-app.itemply.repl.co
     target,
     changeOrigin: true,
     onProxyRes: function (proxyRes, req, res) {
@@ -22,5 +40,5 @@ app.use('/', (req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Unblocker server is running on port \${PORT}`);
+  console.log(`Unblocker server is running on port ${PORT}`);
 });
