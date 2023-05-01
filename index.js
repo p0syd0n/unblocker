@@ -23,20 +23,19 @@ app.use('/create', (req, res) => {
 app.use('/', (req, res, next) => {
   if (req.query.target) {
     req.session.target = req.query.target;
-  }
-
-  if (!req.session.target) {
+    const target = req.session.target;//req.url.replace('/', 'http://');
+    const proxy = createProxyMiddleware({//https://modified-chat-app.itemply.repl.co
+      target,
+      changeOrigin: true,
+      onProxyRes: function (proxyRes, req, res) {
+        proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+      },
+    });
+    proxy(req, res, next);
+  } else {
     res.redirect('/create')
   }
-  const target = req.session.target;//req.url.replace('/', 'http://');
-  const proxy = createProxyMiddleware({//https://modified-chat-app.itemply.repl.co
-    target,
-    changeOrigin: true,
-    onProxyRes: function (proxyRes, req, res) {
-      proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-    },
-  });
-  proxy(req, res, next);
+
 });
 
 app.listen(PORT, () => {
