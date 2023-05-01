@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Form</title>
+</head>
+
+<body>
+    <script>
+        function getStuff() {
+            const text = document.getElementById('searchTerm').value;
+            alert(text);
+            window.location.href = `/?target=${text}`;
+        }
+    </script>
+    <form onsubmit="event.preventDefault(); getStuff();">
+        <label for="searchTerm">Search:</label>
+        <input type="text" id="searchTerm" name="searchTerm">
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>
