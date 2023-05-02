@@ -10,7 +10,7 @@ const HOST = 'localhost';
 app.use(morgan('dev'));
 app.set('view engine', 'ejs');
 app.use(session({
-  secret: 'your-secret-key',
+  secret: 'key',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false } // Set to true if using HTTPS
