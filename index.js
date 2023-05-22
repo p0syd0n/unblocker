@@ -17,25 +17,36 @@ app.use(session({
 }));
 
 app.use('/create', (req, res) => {
-  res.render('search')
+  res.render('search');
 });
 
-app.use('/', (req, res, next) => {
+app.use((req, res, next) => {
   if (req.query.target) {
     req.session.target = req.query.target;
-    const target = req.session.target;//req.url.replace('/', 'http://');
-    const proxy = createProxyMiddleware({//https://modified-chat-app.itemply.repl.co
-      target,
-      changeOrigin: true,
-      onProxyRes: function (proxyRes, req, res) {
-        proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-      },
-    });
-    proxy(req, res, next);
-  } else {
-    res.redirect('/create')
   }
 
+  if (!req.session.target) {
+    return res.redirect('/create');
+  }
+
+  const proxy = createProxyMiddleware({
+    target: req.session.target,
+    changeOrigin: true,
+    onProxyRes: function (proxyRes, req, res) {
+      proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+      if (proxyRes.statusCode === 302) {
+        proxyRes.statusCode = 200;
+      }
+    },
+  });
+
+  // Handle requests for static assets (CSS, JS, images)
+  if (req.url.includes('.css') || req.url.includes('.js') || req.url.includes('.png') || req.url.includes('.jpg')) {
+    return proxy(req, res, next);
+  }
+
+  // Handle other requests with the proxy middleware
+  proxy(req, res, next);
 });
 
 app.listen(PORT, () => {
