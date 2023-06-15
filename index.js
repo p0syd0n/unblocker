@@ -3,8 +3,8 @@ const morgan = require('morgan');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const session = require('express-session');
 const { renderToString } = require('react-dom/server');
-const { default: App } = require('./pages/_app');
-const { default: Document } = require('./pages/_document');
+const { default: App } = require('./views/_app');
+const { default: Document } = require('./views/_document');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = express();
@@ -85,4 +85,3 @@ app.prepare().then(() => {
     console.log(`Unblocker server is running on port ${PORT}`);
   });
 });
-
